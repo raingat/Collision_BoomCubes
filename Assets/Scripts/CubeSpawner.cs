@@ -19,9 +19,9 @@ public class CubeSpawner : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            GameObject partCube = Instantiate(cube.gameObject, cube.transform.position, Quaternion.identity);
+            Cube partCube = Instantiate(cube.gameObject, cube.transform.position, Quaternion.identity).GetComponent<Cube>();
 
-            partCube.GetComponent<Cube>().DecreaseChanceSpawn(cube.ChanceSuccess);
+            partCube.DecreaseChanceSpawn(cube.ChanceSuccess);
 
             partCube.transform.localScale /= _scaleReductionFactor;
 
