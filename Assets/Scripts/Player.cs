@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private Ray _ray;
     private RaycastHit _hitInfo;
 
-    public event Action<GameObject> ClickedOnCube;
+    public event Action<Cube> ClickedOnCube;
 
     private void Update()
     {
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(_numberLeftMouseButton))
             {
-                ClickedOnCube?.Invoke(_hitInfo.transform.gameObject);
+                ClickedOnCube?.Invoke(_hitInfo.transform.GetComponent<Cube>());
             }
         }
     }

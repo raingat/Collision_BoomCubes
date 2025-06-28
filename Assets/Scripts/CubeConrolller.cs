@@ -29,9 +29,9 @@ public class CubeController : MonoBehaviour
         _player.ClickedOnCube -= Split;
     }
 
-    private void Split(GameObject cube)
+    private void Split(Cube cube)
     {
-        if (cube.GetComponent<Cube>().CanSplit())
+        if (cube.CanSplit())
         {
             int randomCountAfterSplit = Mathf.RoundToInt(Random.Range(_minCount, _maxCount));
 
@@ -40,6 +40,6 @@ public class CubeController : MonoBehaviour
             _detonator.Explode(rigidbodys, cube.transform.position);
         }
 
-        Destroy(cube);
+        Destroy(cube.gameObject);
     }
 }

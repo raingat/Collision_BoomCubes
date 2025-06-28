@@ -13,15 +13,15 @@ public class CubeSpawner : MonoBehaviour
         _colorChanger = GetComponent<ColorChanger>();
     }
 
-    public List<Rigidbody> Spawn(GameObject cube, int count)
+    public List<Rigidbody> Spawn(Cube cube, int count)
     {
         List<Rigidbody> rigidbodys = new List<Rigidbody>();
 
         for (int i = 0; i < count; i++)
         {
-            GameObject partCube = Instantiate(cube, cube.transform.position, Quaternion.identity);
+            GameObject partCube = Instantiate(cube.gameObject, cube.transform.position, Quaternion.identity);
 
-            partCube.GetComponent<Cube>().DecreaseChanceSpawn(cube.GetComponent<Cube>().ChanceSuccess);
+            partCube.GetComponent<Cube>().DecreaseChanceSpawn(cube.ChanceSuccess);
 
             partCube.transform.localScale /= _scaleReductionFactor;
 
