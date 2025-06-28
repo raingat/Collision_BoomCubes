@@ -1,67 +1,35 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CubeFactory))]
 [RequireComponent(typeof(ColorChanger))]
 public class CubeSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _prefabCube;
-
-    [SerializeField] private Player _player;
-
-    [SerializeField] private float _minCount = 2;
-    [SerializeField] private float _maxCount = 6;
-
     [SerializeField] private float _scaleReductionFactor = 2;
 
-    [Range(0.0f, 1.0f)]
-    [SerializeField] private float _chanceSuccess = 1;
-    [SerializeField] private float _chanceReductionRatio = 2;
-
-    private CubeFactory _cubeFactory;
     private ColorChanger _colorChanger;
 
-    public event Action<List<Rigidbody>, Vector3> Spawned;
-    
     private void Start()
     {
-        _cubeFactory = GetComponent<CubeFactory>();
         _colorChanger = GetComponent<ColorChanger>();
     }
 
-    private void OnEnable()
+    public List<Rigidbody> Spawn(GameObject cube, int count)
     {
-        _player.Destroyed += Spawn;
-    }
+        List<Rigidbody> rigidbodys = new List<Rigidbody>();
 
-    private void OnDisable()
-    {
-        _player.Destroyed -= Spawn;
-    }
-
-    private void Spawn(Vector3 spawnPoint, Vector3 scale)
-    {
-        if (CanCreate())
+        for (int i = 0; i < count; i++)
         {
-            float randomCount = UnityEngine.Random.Range(_minCount, _maxCount);
-            randomCount = Mathf.RoundToInt(randomCount);
+            GameObject partCube = Instantiate(cube, cube.transform.position, Quaternion.identity);
 
-            List<Rigidbody> spawnedCubes = _cubeFactory.Create(_prefabCube, spawnPoint, scale, _colorChanger, randomCount, _scaleReductionFactor);
+            partCube.GetComponent<Cube>().DecreaseChanceSpawn(cube.GetComponent<Cube>().ChanceSuccess);
 
-            Spawned?.Invoke(spawnedCubes, spawnPoint);
+            partCube.transform.localScale /= _scaleReductionFactor;
 
-            _chanceSuccess /= _chanceReductionRatio;
+            _colorChanger.Change(partCube.GetComponent<Renderer>());
+
+            rigidbodys.Add(partCube.GetComponent<Rigidbody>());
         }
-    }
 
-    private bool CanCreate()
-    {
-        float randomChance = UnityEngine.Random.value;
-
-        if (randomChance < _chanceSuccess)
-            return true;
-        else
-            return false;
+        return rigidbodys;
     }
 }

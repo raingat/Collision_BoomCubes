@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private Ray _ray;
     private RaycastHit _hitInfo;
 
-    public event Action<Vector3, Vector3> Destroyed;
+    public event Action<GameObject> ClickedOnCube;
 
     private void Update()
     {
@@ -20,13 +20,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(_numberLeftMouseButton))
             {
-                Vector3 positionObject = _hitInfo.transform.position;
-
-                Vector3 scaleObject = _hitInfo.transform.localScale;
-
-                Destroy(_hitInfo.transform.gameObject);
-                
-                Destroyed?.Invoke(positionObject, scaleObject);
+                ClickedOnCube?.Invoke(_hitInfo.transform.gameObject);
             }
         }
     }
